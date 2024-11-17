@@ -19,21 +19,9 @@ body {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    min-width: 200px;
-    resize: both;
-    overflow: hidden;
-    cursor: move;
+    width: 300px;
 }
 
-/* Add styling for draggable area */
-#sidebar-header {
-    cursor: move;
-    padding: 5px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-}
-
-/* Inputs and buttons styling */
 #sidebar label {
     display: block;
     margin-top: 10px;
@@ -45,11 +33,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* Marker shadow styling */
-.marker-shadow {
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+h4 {
+    margin-top: 20px;
 }

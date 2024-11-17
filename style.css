@@ -1,41 +1,17 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    display: flex;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-}
-
 #map {
-    width: 80%; 
-    height: 100%;
-}
-
-#sidebar {
-    width: 20%;
-    padding: 20px;
-    background-color: #fff;
-    border-left: 2px solid #ccc;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#sidebar h4 {
-    margin-top: 0;
-}
-
-#detonate-btn, #clear-btn {
-    margin-top: 10px;
-    padding: 10px;
     width: 100%;
-    cursor: pointer;
+    height: 600px;
 }
 
-input, select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+.marker {
+    background-color: #ff0000;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
-#explosion-details {
-    margin-top: 20px;
+#explosion-info p {
+    font-size: 14px;
+    margin: 5px 0;
 }

@@ -1,111 +1,91 @@
-// Initialize the map
-const map = L.map('map', {
-    crs: L.CRS.Simple, // Simple coordinate system
-    minZoom: -2,
-    maxZoom: 2,
-});
+// Define the radii and commentary for various yields
+const radiusData = {
+    "1": { // 1 Kiloton
+        fireball: { radius: 88.4, description: "Maximum size of the nuclear fireball; relevance to damage on the ground depends on the height of detonation. If it touches the ground, the amount of radioactive fallout is significantly increased. Anything inside the fireball is effectively vaporized." },
+        heavyBlast: { radius: 218, description: "At 20 psi overpressure, heavily built concrete buildings are severely damaged or demolished; fatalities approach 100%. Often used as a benchmark for heavy damage in cities." },
+        moderateBlast: { radius: 458, description: "At 5 psi overpressure, most residential buildings collapse, injuries are universal, fatalities are widespread. The chances of a fire starting in commercial and residential damage are high, and buildings so damaged are at high risk of spreading fire. Often used as a benchmark for moderate damage in cities." },
+        thermal: { radius: 500, description: "Third degree burns extend throughout the layers of skin, and are often painless because they destroy the pain nerves. They can cause severe scarring or disablement, and can require amputation. 100% probability for 3rd degree burns at this yield is 7 cal/cm²." },
+        lightBlast: { radius: 1180, description: "At around 1 psi overpressure, glass windows can be expected to break. This can cause many injuries in a surrounding population who comes to a window after seeing the flash of a nuclear explosion (which travels faster than the pressure wave). Often used as a benchmark for light damage in cities." },
+        noThermal: { radius: 1210, description: "The distance at which anybody beyond would definitely suffer no damage from thermal radiation (heat). 100% probability of no significant thermal damage at this yield is 1.15 cal/cm²." }
+    },
+    "custom": { // Custom yields - to be calculated
+        fireball: { radius: 0, description: "" },
+        heavyBlast: { radius: 0, description: "" },
+        moderateBlast: { radius: 0, description: "" },
+        thermal: { radius: 0, description: "" },
+        lightBlast: { radius: 0, description: "" },
+        noThermal: { radius: 0, description: "" }
+    }
+};
 
-// Image bounds (adjust according to your PNG image size)
-const bounds = [[0, 0], [2200, 2200]];  // Example size of your PNG image
-const image = L.imageOverlay('10-5-24.png', bounds).addTo(map);  // Add your map image
+// Map Initialization
+const map = L.map('map').setView([51.505, -0.09], 13); // Default location
 
-map.fitBounds(bounds);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-// Marker setup for explosion point
-const marker = L.marker([1100, 1100], { draggable: true }).addTo(map);
-marker.bindPopup("Explosion Point").openPopup();
+// Create a circle to represent explosion radius (temporary circle for demonstration)
+let explosionCircle = L.circle([51.505, -0.09], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 1000
+}).addTo(map);
 
-// Store explosion circles
-let explosionCircles = [];
+// Function to update commentary and circle based on selected yield
+function updateExplosion() {
+    const yieldSelector = document.getElementById("yield-selector").value;
+    const customYield = document.getElementById("custom-yield").value;
 
-// Clear previous explosion circles
-function clearExplosionCircles() {
-    explosionCircles.forEach(circle => map.removeLayer(circle));
-    explosionCircles = [];
+    // Use custom yield or fallback to predefined yield
+    const yieldValue = yieldSelector === "custom" ? parseFloat(customYield) : parseFloat(yieldSelector);
+    const yieldKey = yieldSelector === "custom" ? "custom" : "1"; 
+
+    // Adjust custom yield data based on the entered value
+    if (yieldKey === "custom" && yieldValue > 0) {
+        // Scale the radii based on the entered custom yield
+        const scaleFactor = yieldValue / 1; // 1 Kiloton as baseline
+        radiusData["custom"].fireball.radius = 88.4 * scaleFactor;
+        radiusData["custom"].heavyBlast.radius = 218 * scaleFactor;
+        radiusData["custom"].moderateBlast.radius = 458 * scaleFactor;
+        radiusData["custom"].thermal.radius = 500 * scaleFactor;
+        radiusData["custom"].lightBlast.radius = 1180 * scaleFactor;
+        radiusData["custom"].noThermal.radius = 1210 * scaleFactor;
+    }
+
+    // Update the explosion details section
+    const data = radiusData[yieldKey];
+    document.getElementById("fireball-commentary").innerHTML = `Fireball radius: ${data.fireball.radius.toFixed(1)} m (${(data.fireball.radius / 1000).toFixed(2)} km²) <br>${data.fireball.description}`;
+    document.getElementById("heavy-blast-commentary").innerHTML = `Heavy blast damage radius (20 psi): ${data.heavyBlast.radius.toFixed(1)} m (${(data.heavyBlast.radius / 1000).toFixed(2)} km²) <br>${data.heavyBlast.description}`;
+    document.getElementById("moderate-blast-commentary").innerHTML = `Moderate blast damage radius (5 psi): ${data.moderateBlast.radius.toFixed(1)} m (${(data.moderateBlast.radius / 1000).toFixed(2)} km²) <br>${data.moderateBlast.description}`;
+    document.getElementById("thermal-commentary").innerHTML = `Thermal radiation radius (3rd degree burns): ${data.thermal.radius.toFixed(1)} m (${(data.thermal.radius / 1000).toFixed(2)} km²) <br>${data.thermal.description}`;
+    document.getElementById("light-blast-commentary").innerHTML = `Light blast damage radius (1 psi): ${data.lightBlast.radius.toFixed(1)} m (${(data.lightBlast.radius / 1000).toFixed(2)} km²) <br>${data.lightBlast.description}`;
+    document.getElementById("no-thermal-commentary").innerHTML = `Thermal radiation radius (no harm): ${data.noThermal.radius.toFixed(1)} m (${(data.noThermal.radius / 1000).toFixed(2)} km²) <br>${data.noThermal.description}`;
+
+    // Update the explosion circle's radius
+    explosionCircle.setRadius(data.heavyBlast.radius);
 }
 
-// Detonate the bomb and calculate explosion effects
+// Function to simulate detonation
 function detonate() {
-    let yieldValue = parseFloat(document.getElementById('yield').value);
-    if (document.getElementById('custom-yield').value) {
-        yieldValue = parseFloat(document.getElementById('custom-yield').value);  // Custom yield
+    const yieldSelector = document.getElementById("yield-selector").value;
+    if (yieldSelector !== "custom" && !document.getElementById("custom-yield").value) {
+        alert("Please enter a custom yield or select a yield from the list.");
+        return;
     }
-
-    const burstHeight = document.getElementById('burst').value;
-    const scalingFactor = 0.533;  // Scaling factor for image-based map
-
-    let fireballRadius, blastRadius, thermalRadius, lightBlastRadius;
-    let descriptions = '';
-    let textColor = "red";
-
-    // Define explosion effects for different yields
-    if (yieldValue === 0.001) {  // 1 Ton handheld nuke
-        fireballRadius = 67 * scalingFactor;
-        blastRadius = 173 * scalingFactor;
-        thermalRadius = 363 * scalingFactor;
-        lightBlastRadius = 930 * scalingFactor;
-        descriptions = `
-            <li style="color: orange;"><strong>Fireball radius:</strong> 67 m</li>
-            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 173 m</li>
-            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 363 m</li>
-            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 930 m</li>
-        `;
-    } else if (yieldValue === 0.02) {  // Grenade
-        fireballRadius = 13 * scalingFactor;
-        blastRadius = 33 * scalingFactor;
-        thermalRadius = 69 * scalingFactor;
-        lightBlastRadius = 174 * scalingFactor;
-        descriptions = `
-            <li style="color: orange;"><strong>Fireball radius:</strong> 13 m</li>
-            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 33 m</li>
-            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 69 m</li>
-            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 174 m</li>
-        `;
-    } else if (yieldValue === 0.03) {  // C4
-        fireballRadius = 20 * scalingFactor;
-        blastRadius = 50 * scalingFactor;
-        thermalRadius = 103 * scalingFactor;
-        lightBlastRadius = 258 * scalingFactor;
-        descriptions = `
-            <li style="color: orange;"><strong>Fireball radius:</strong> 20 m</li>
-            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 50 m</li>
-            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 103 m</li>
-            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 258 m</li>
-        `;
-    } else if (yieldValue === 0.1) {  // Dynamite
-        fireballRadius = 35 * scalingFactor;
-        blastRadius = 88 * scalingFactor;
-        thermalRadius = 183 * scalingFactor;
-        lightBlastRadius = 460 * scalingFactor;
-        descriptions = `
-            <li style="color: orange;"><strong>Fireball radius:</strong> 35 m</li>
-            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 88 m</li>
-            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 183 m</li>
-            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 460 m</li>
-        `;
-    } else {
-        fireballRadius = 100 * scalingFactor;
-        blastRadius = 250 * scalingFactor;
-        thermalRadius = 500 * scalingFactor;
-        lightBlastRadius = 1250 * scalingFactor;
-    }
-
-    // Clear previous explosion circles
-    clearExplosionCircles();
-
-    // Add explosion circles with distinct colors for each effect
-    explosionCircles.push(L.circle(marker.getLatLng(), fireballRadius, { color: "orange" }).addTo(map));  // Fireball
-    explosionCircles.push(L.circle(marker.getLatLng(), blastRadius, { color: "red" }).addTo(map));     // Blast
-    explosionCircles.push(L.circle(marker.getLatLng(), thermalRadius, { color: "yellow" }).addTo(map)); // Thermal
-    explosionCircles.push(L.circle(marker.getLatLng(), lightBlastRadius, { color: "pink" }).addTo(map)); // Light blast
-
-    // Update the detonation details section
-    const details = `
-        <h4>Explosion Details (Yield: ${yieldValue} KT)</h4>
-        <ul>${descriptions}</ul>
-    `;
-    document.getElementById("detonation-details").innerHTML = details;
+    updateExplosion();  // Update the explosion details and radius
 }
 
-// Button click handler to trigger detonation
-document.getElementById('detonate-btn').addEventListener('click', detonate);
+// Clear all the data (reset map and UI)
+function clearAll() {
+    explosionCircle.setRadius(0); // Remove the explosion circle
+    document.getElementById("fireball-commentary").innerHTML = '';
+    document.getElementById("heavy-blast-commentary").innerHTML = '';
+    document.getElementById("moderate-blast-commentary").innerHTML = '';
+    document.getElementById("thermal-commentary").innerHTML = '';
+    document.getElementById("light-blast-commentary").innerHTML = '';
+    document.getElementById("no-thermal-commentary").innerHTML = '';
+    document.getElementById("yield-selector").value = '1'; // Reset the yield to 1 kiloton
+    document.getElementById("custom-yield").value = ''; // Clear custom yield
+}

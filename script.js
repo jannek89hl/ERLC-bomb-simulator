@@ -26,20 +26,19 @@ function clearExplosionCircles() {
 // Function to detonate the bomb and calculate explosion radii
 function detonate() {
     const yieldValue = parseFloat(document.getElementById('yield').value);
-    const burstHeight = document.getElementById('burst').value;
     const scalingFactor = 0.533; // 1 pixel = 0.533 meters (scaled to map)
 
     // Adjust explosion radii based on yield (in kilotons)
     let fireballRadius, blastRadius, thermalRadius, lightBlastRadius;
     let descriptions = '';
-    let textColor = '';
 
-    // Handle different yield and height of burst cases
+    // Validate yield input
     if (isNaN(yieldValue) || yieldValue <= 0) {
         alert('Please enter a valid yield value.');
         return;
     }
 
+    // Adjust radii based on yield
     if (yieldValue <= 0.001) { // Very small yield (like hand grenade)
         fireballRadius = 2 * scalingFactor;
         blastRadius = 6 * scalingFactor;
@@ -113,19 +112,12 @@ document.getElementById('preset').addEventListener('change', function () {
     } else if (this.value === 'dynamite') {
         presetYield = 0.1; // Dynamite (0.1 kilotons)
     } else if (this.value === 'none') {
-        presetYield = 0; // Custom yield
+        presetYield = parseFloat(document.getElementById('yield').value); // Custom
     }
 
-    // Update the yield input based on preset
+    // Update the bomb yield input field when a preset is selected
     document.getElementById('yield').value = presetYield;
-
-    // Enable/Disable custom yield input
-    if (presetYield === 0) {
-        document.getElementById('yield').disabled = false; // Enable custom yield input
-    } else {
-        document.getElementById('yield').disabled = true; // Disable custom yield input
-    }
 });
 
-// Detonate button event listener
+// Event listener for detonate button
 document.getElementById('detonate').addEventListener('click', detonate);

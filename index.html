@@ -11,16 +11,16 @@
     <!-- Map container -->
     <div id="map"></div>
 
-    <!-- Sidebar UI -->
+    <!-- Sidebar for controls -->
     <div id="sidebar">
         <h4>Explosion Settings</h4>
-        
+
         <!-- Yield Selector -->
-        <label for="yield-selector">Select Yield:</label>
-        <select id="yield-selector" onchange="updateExplosion()">
-            <option value="1">1 Kiloton</option>
-            <option value="2">5 Kiloton</option>
-            <option value="3">10 Kiloton</option>
+        <label for="preset-selector">Select Explosion Type:</label>
+        <select id="preset-selector" onchange="updateExplosion()">
+            <option value="hand_grenade">Hand Grenade (0.02 kt)</option>
+            <option value="dynamite">Dynamite (0.5 kt)</option>
+            <option value="c4">C4 (1.0 kt)</option>
             <option value="custom">Custom Yield</option>
         </select>
 
@@ -46,6 +46,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="map.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

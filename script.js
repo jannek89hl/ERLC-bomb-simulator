@@ -26,6 +26,11 @@ function clearExplosionCircles() {
 // Function to detonate the bomb and calculate explosion radii
 function detonate() {
     const yieldValue = parseFloat(document.getElementById('yield').value);
+    if (isNaN(yieldValue) || yieldValue <= 0) {
+        alert("Please enter a valid Bomb Yield value.");
+        return;
+    }
+
     const scalingFactor = 0.533; // 1 pixel = 0.533 meters (scaled to map)
 
     // Define explosion radii based on yield (in kilotons)
@@ -114,3 +119,6 @@ document.getElementById('preset').addEventListener('change', function () {
         }
     }
 });
+
+// Event listener for detonate button
+document.getElementById('detonate').addEventListener('click', detonate);

@@ -91,13 +91,11 @@ marker.on('drag', function() {
 
 // Add a shadow under the marker and lift it when dragging
 marker.on('dragstart', function() {
-    // Lift the marker slightly during drag
+    // Lift the marker slightly during drag by changing zIndexOffset
     marker.setZIndexOffset(1000); // Move the marker above others
-    marker.getElement().style.transform = "translateY(-10px)"; // Slight lift effect
 });
 
 marker.on('dragend', function() {
     // Reset the lift effect when dragging ends
     marker.setZIndexOffset(0);
-    marker.getElement().style.transform = "translateY(0)"; // Reset to original position
 });

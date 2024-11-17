@@ -11,14 +11,15 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            height: 100%;  /* Make sure body takes full height */
         }
         #map {
-            height: 70vh;  /* Map takes up 70% of the screen height */
+            height: 80vh;  /* Map takes 80% of the screen height */
             width: 100%;
         }
         #detonation-details {
-            max-height: 30vh;  /* Rest of the screen space for the details */
-            overflow-y: auto;  /* Scrollable if content exceeds max-height */
+            height: 20vh;  /* Details take 20% of the screen height */
+            overflow-y: auto;
             padding: 10px;
             border-top: 1px solid #ccc;
             background-color: #f9f9f9;
@@ -39,15 +40,13 @@
     </style>
 </head>
 <body>
-    <h1>Explosion Simulation Map</h1>
-
+    <h1 style="text-align: center;">Explosion Simulation Map</h1>
     <div id="map"></div>
     <div id="detonation-details">
         <!-- Dynamic explosion commentary will appear here -->
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="map.js"></script>  <!-- External JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>

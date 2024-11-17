@@ -10,21 +10,45 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            height: 100%;  /* Make sure body takes full height */
+            display: flex;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
         #map {
-            height: 80vh;  /* Map takes 80% of the screen height */
-            width: 100%;
+            width: 80%;  /* Map takes 80% of the screen width */
+            height: 100%;
+        }
+        #side-panel {
+            width: 20%;  /* Side panel takes 20% of the screen width */
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            z-index: 1000; /* Ensure the panel stays on top */
+        }
+        #side-panel h2 {
+            margin-top: 0;
+        }
+        #side-panel button {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #side-panel button:hover {
+            background-color: #0056b3;
         }
         #detonation-details {
-            height: 20vh;  /* Details take 20% of the screen height */
-            overflow-y: auto;
+            margin-top: 20px;
             padding: 10px;
-            border-top: 1px solid #ccc;
             background-color: #f9f9f9;
-            box-sizing: border-box;
-            width: 100%;
+            border: 1px solid #ddd;
         }
         #detonation-details ul {
             list-style-type: none;
@@ -34,17 +58,42 @@
         #detonation-details li {
             margin: 5px 0;
         }
-        .circle-description {
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Explosion Simulation Map</h1>
-    <div id="map"></div>
-    <div id="detonation-details">
-        <!-- Dynamic explosion commentary will appear here -->
+    <div id="side-panel">
+        <h2>Explosion Simulator</h2>
+        <!-- Yield Presets -->
+        <label for="yield">Choose Yield:</label>
+        <select id="yield">
+            <option value="0.001">1 Ton</option>
+            <option value="0.1">100 Tons</option>
+            <option value="1">1 Kiloton</option>
+            <option value="10">10 Kilotons</option>
+        </select>
+
+        <br><br>
+
+        <!-- Burst Height -->
+        <label for="burst">Choose Burst Height:</label>
+        <select id="burst">
+            <option value="air">Air Burst</option>
+            <option value="surface">Surface Burst</option>
+        </select>
+
+        <br><br>
+
+        <!-- Detonate Button -->
+        <button id="detonate-btn">Detonate</button>
+
+        <!-- Detonation details will be populated here -->
+        <div id="detonation-details">
+            <!-- Dynamic explosion commentary will appear here -->
+        </div>
     </div>
+
+    <div id="map"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>

@@ -17,6 +17,17 @@
 
     <!-- Sidebar UI -->
     <div id="sidebar">
+        <div id="sidebar-header">
+            <strong>Explosion Simulator</strong>
+        </div>
+        <label for="preset">Select Preset:</label>
+        <select id="preset">
+            <option value="none">None</option>
+            <option value="hand_grenade">Hand Grenade</option>
+            <option value="c4">C4</option>
+            <option value="dynamite">Dynamite</option>
+        </select>
+
         <label for="yield">Bomb Yield (kt):</label>
         <input type="number" id="yield" value="20">
         

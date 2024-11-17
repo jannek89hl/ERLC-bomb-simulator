@@ -5,7 +5,7 @@ const map = L.map('map', {
 });
 
 const bounds = [[0, 0], [2200, 2200]];  // Define bounds based on the image size
-const image = L.imageOverlay('5-10-24.png', bounds).addTo(map);  // Your custom PNG image for the map
+const image = L.imageOverlay('10-5-24.png', bounds).addTo(map);  // Your custom PNG image for the map
 
 map.fitBounds(bounds);  // Fit map to the image bounds
 

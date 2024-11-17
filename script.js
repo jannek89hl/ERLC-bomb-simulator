@@ -35,61 +35,66 @@ function detonate() {
     let textColor = '';
 
     // Handle different yield and height of burst cases
-    if (yieldValue === 0.001) { // Hand Grenade (0.001 kilotons)
+    if (isNaN(yieldValue) || yieldValue <= 0) {
+        alert('Please enter a valid yield value.');
+        return;
+    }
+
+    if (yieldValue <= 0.001) { // Very small yield (like hand grenade)
         fireballRadius = 2 * scalingFactor;
         blastRadius = 6 * scalingFactor;
         thermalRadius = 10 * scalingFactor;
         lightBlastRadius = 25 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 2 m (12 m²)</span><br>A very small explosion, just a small fireball.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 6 m (0.01 km²)</span><br>Some walls may crack or collapse at this radius; highly localized damage.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 10 m (0.03 km²)</span><br>Minor damage to small structures, possible injuries to those close by.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 25 m (0.2 km²)</span><br>Glass windows may break, few injuries likely.</li>
+            <li><span style="color: orange;"><strong>Fireball radius:</strong> 2 m (12 m²)</span><br>A very small explosion, just a small fireball.</li>
+            <li><span style="color: red;"><strong>Heavy blast damage radius (20 psi):</strong> 6 m (0.01 km²)</span><br>Some walls may crack or collapse at this radius; highly localized damage.</li>
+            <li><span style="color: lighterorange;"><strong>Moderate blast damage radius (5 psi):</strong> 10 m (0.03 km²)</span><br>Minor damage to small structures, possible injuries to those close by.</li>
+            <li><span style="color: gray;"><strong>Light blast damage radius (1 psi):</strong> 25 m (0.2 km²)</span><br>Glass windows may break, few injuries likely.</li>
         `;
-    } else if (yieldValue === 0.05) { // C4 (0.05 kilotons)
+    } else if (yieldValue <= 0.05) { // Small yield (like C4)
         fireballRadius = 10 * scalingFactor;
         blastRadius = 40 * scalingFactor;
         thermalRadius = 60 * scalingFactor;
         lightBlastRadius = 150 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 10 m (30 m²)</span><br>Small but concentrated explosion with high energy.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 40 m (0.05 km²)</span><br>Concrete buildings may suffer damage; fatalities are possible for those near.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 60 m (0.11 km²)</span><br>Heavy damage to small structures and injury risk is significant.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 150 m (0.07 km²)</span><br>Widespread glass breakage, significant risk of injuries from flying debris.</li>
+            <li><span style="color: orange;"><strong>Fireball radius:</strong> 10 m (30 m²)</span><br>Small but concentrated explosion with high energy.</li>
+            <li><span style="color: red;"><strong>Heavy blast damage radius (20 psi):</strong> 40 m (0.05 km²)</span><br>Concrete buildings may suffer damage; fatalities are possible for those near.</li>
+            <li><span style="color: lighterorange;"><strong>Moderate blast damage radius (5 psi):</strong> 60 m (0.11 km²)</span><br>Heavy damage to small structures and injury risk is significant.</li>
+            <li><span style="color: gray;"><strong>Light blast damage radius (1 psi):</strong> 150 m (0.07 km²)</span><br>Widespread glass breakage, significant risk of injuries from flying debris.</li>
         `;
-    } else if (yieldValue === 0.1) { // Dynamite (0.1 kilotons)
+    } else if (yieldValue <= 0.1) { // Medium yield (like dynamite)
         fireballRadius = 20 * scalingFactor;
         blastRadius = 100 * scalingFactor;
         thermalRadius = 150 * scalingFactor;
         lightBlastRadius = 300 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 20 m (120 m²)</span><br>Large but not catastrophic fireball with high heat.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 100 m (0.03 km²)</span><br>Widespread severe damage to buildings, fatalities near the blast center.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 150 m (0.07 km²)</span><br>Major structural damage in urban areas, casualties and fires.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 300 m (0.28 km²)</span><br>Widespread damage to windows and doors, possible injuries across a large area.</li>
+            <li><span style="color: orange;"><strong>Fireball radius:</strong> 20 m (120 m²)</span><br>Large but not catastrophic fireball with high heat.</li>
+            <li><span style="color: red;"><strong>Heavy blast damage radius (20 psi):</strong> 100 m (0.03 km²)</span><br>Widespread severe damage to buildings, fatalities near the blast center.</li>
+            <li><span style="color: lighterorange;"><strong>Moderate blast damage radius (5 psi):</strong> 150 m (0.07 km²)</span><br>Major structural damage in urban areas, casualties and fires.</li>
+            <li><span style="color: gray;"><strong>Light blast damage radius (1 psi):</strong> 300 m (0.28 km²)</span><br>Widespread damage to windows and doors, possible injuries across a large area.</li>
         `;
     }
 
     // Add explosion circles to the map
     clearExplosionCircles();
 
-    // Add fireball circle
-    const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red', fillOpacity: 0.2 }).addTo(map);
+    // Add fireball circle (color = orange)
+    const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'orange', fillOpacity: 0.2 }).addTo(map);
     explosionCircles.push(fireballCircle);
 
-    // Add blast damage circles
-    const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange', fillOpacity: 0.2 }).addTo(map);
+    // Add blast damage circle (color = red)
+    const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'red', fillOpacity: 0.2 }).addTo(map);
     explosionCircles.push(blastCircle);
 
-    // Add thermal radiation circles
-    const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow', fillOpacity: 0.2 }).addTo(map);
+    // Add thermal radiation circle (color = lighter orange)
+    const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'lightorange', fillOpacity: 0.2 }).addTo(map);
     explosionCircles.push(thermalCircle);
 
-    // Add light blast damage circles
-    const lightBlastCircle = L.circle(marker.getLatLng(), { radius: lightBlastRadius, color: 'green', fillOpacity: 0.2 }).addTo(map);
+    // Add light blast damage circle (color = gray)
+    const lightBlastCircle = L.circle(marker.getLatLng(), { radius: lightBlastRadius, color: 'gray', fillOpacity: 0.2 }).addTo(map);
     explosionCircles.push(lightBlastCircle);
 
     // Display detonation details
@@ -114,7 +119,7 @@ document.getElementById('preset').addEventListener('change', function () {
     // Update the yield input based on preset
     document.getElementById('yield').value = presetYield;
 
-    // Update the yield input behavior for custom entry
+    // Enable/Disable custom yield input
     if (presetYield === 0) {
         document.getElementById('yield').disabled = false; // Enable custom yield input
     } else {
@@ -122,18 +127,5 @@ document.getElementById('preset').addEventListener('change', function () {
     }
 });
 
-// Event listener for custom yield input
-document.getElementById('yield').addEventListener('input', function () {
-    if (this.value !== "") {
-        document.getElementById('preset').value = "none"; // Set preset to 'none' when custom input is used
-    }
-});
-
 // Detonate button event listener
 document.getElementById('detonate').addEventListener('click', detonate);
-
-// Clear effects button event listener
-document.getElementById('clear-effects').addEventListener('click', function () {
-    clearExplosionCircles();
-    document.getElementById('detonation-info').style.display = 'none';
-});

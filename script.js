@@ -32,35 +32,44 @@ function detonate() {
     // Adjust explosion radii based on yield (in kilotons)
     let fireballRadius, blastRadius, thermalRadius, lightBlastRadius;
     let descriptions = '';
+    let textColor = '';
 
     // Handle different yield and height of burst cases
-    if (yieldValue === 0.02) {
-        fireballRadius = 18.5 * scalingFactor;
-        blastRadius = 59.1 * scalingFactor;
-        thermalRadius = 136 * scalingFactor;
-        lightBlastRadius = 319 * scalingFactor;
+    if (yieldValue === 0.001) { // Hand Grenade (0.001 kilotons)
+        fireballRadius = 2 * scalingFactor;
+        blastRadius = 6 * scalingFactor;
+        thermalRadius = 10 * scalingFactor;
+        lightBlastRadius = 25 * scalingFactor;
 
         descriptions = `
-            <li><strong>Fireball radius:</strong> 18.5 m (1,070 m²)<br>Maximum size of the nuclear fireball; relevance to damage on the ground depends on the height of detonation. If it touches the ground, the amount of radioactive fallout is significantly increased. Anything inside the fireball is effectively vaporized.</li>
-            <li><strong>Heavy blast damage radius (20 psi):</strong> 59.1 m (0.01 km²)<br>At 20 psi overpressure, heavily built concrete buildings are severely damaged or demolished; fatalities approach 100%. Often used as a benchmark for heavy damage in cities.</li>
-            <li><strong>Moderate blast damage radius (5 psi):</strong> 124 m (0.05 km²)<br>At 5 psi overpressure, most residential buildings collapse, injuries are universal, fatalities are widespread. The chances of a fire starting in commercial and residential damage are high, and buildings so damaged are at high risk of spreading fire. Often used as a benchmark for moderate damage in cities.</li>
-            <li><strong>Thermal radiation radius (3rd degree burns):</strong> 136 m (0.06 km²)<br>Third degree burns extend throughout the layers of skin, and are often painless because they destroy the pain nerves. They can cause severe scarring or disablement, and can require amputation. 100% probability for 3rd degree burns at this yield is 7.07 cal/cm².</li>
-            <li><strong>Light blast damage radius (1 psi):</strong> 319 m (0.32 km²)<br>At around 1 psi overpressure, glass windows can be expected to break. This can cause many injuries in a surrounding population who comes to a window after seeing the flash of a nuclear explosion (which travels faster than the pressure wave). Often used as a benchmark for light damage in cities.</li>
-            <li><strong>Thermal radiation radius (no harm):</strong> 329 m (0.34 km²)<br>The distance at which anybody beyond would definitely suffer no damage from thermal radiation (heat). 100% probability of no significant thermal damage at this yield is 0.13 cal/cm².</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 2 m (12 m²)</span><br>A very small explosion, just a small fireball.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 6 m (0.01 km²)</span><br>Some walls may crack or collapse at this radius; highly localized damage.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 10 m (0.03 km²)</span><br>Minor damage to small structures, possible injuries to those close by.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 25 m (0.2 km²)</span><br>Glass windows may break, few injuries likely.</li>
         `;
-    } else if (yieldValue === 0.5) {
-        fireballRadius = 67 * scalingFactor;
-        blastRadius = 173 * scalingFactor;
-        thermalRadius = 399 * scalingFactor;
-        lightBlastRadius = 929 * scalingFactor;
+    } else if (yieldValue === 0.05) { // C4 (0.05 kilotons)
+        fireballRadius = 10 * scalingFactor;
+        blastRadius = 40 * scalingFactor;
+        thermalRadius = 60 * scalingFactor;
+        lightBlastRadius = 150 * scalingFactor;
 
         descriptions = `
-            <li><strong>Fireball radius:</strong> 67 m (0.01 km²)<br>Maximum size of the nuclear fireball; relevance to damage on the ground depends on the height of detonation. If it touches the ground, the amount of radioactive fallout is significantly increased. Anything inside the fireball is effectively vaporized.</li>
-            <li><strong>Heavy blast damage radius (20 psi):</strong> 173 m (0.09 km²)<br>At 20 psi overpressure, heavily built concrete buildings are severely damaged or demolished; fatalities approach 100%. Often used as a benchmark for heavy damage in cities.</li>
-            <li><strong>Moderate blast damage radius (5 psi):</strong> 363 m (0.41 km²)<br>At 5 psi overpressure, most residential buildings collapse, injuries are universal, fatalities are widespread. The chances of a fire starting in commercial and residential damage are high, and buildings so damaged are at high risk of spreading fire. Often used as a benchmark for moderate damage in cities.</li>
-            <li><strong>Thermal radiation radius (3rd degree burns):</strong> 399 m (0.5 km²)<br>Third degree burns extend throughout the layers of skin, and are often painless because they destroy the pain nerves. They can cause severe scarring or disablement, and can require amputation. 100% probability for 3rd degree burns at this yield is 6.65 cal/cm².</li>
-            <li><strong>Light blast damage radius (1 psi):</strong> 929 m (2.74 km²)<br>At around 1 psi overpressure, glass windows can be expected to break. This can cause many injuries in a surrounding population who comes to a window after seeing the flash of a nuclear explosion (which travels faster than the pressure wave). Often used as a benchmark for light damage in cities.</li>
-            <li><strong>Thermal radiation radius (no harm):</strong> 960 m (2.91 km²)<br>The distance at which anybody beyond would definitely suffer no damage from thermal radiation (heat). 100% probability of no significant thermal damage at this yield is 1.05 cal/cm².</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 10 m (30 m²)</span><br>Small but concentrated explosion with high energy.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 40 m (0.05 km²)</span><br>Concrete buildings may suffer damage; fatalities are possible for those near.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 60 m (0.11 km²)</span><br>Heavy damage to small structures and injury risk is significant.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 150 m (0.07 km²)</span><br>Widespread glass breakage, significant risk of injuries from flying debris.</li>
+        `;
+    } else if (yieldValue === 0.1) { // Dynamite (0.1 kilotons)
+        fireballRadius = 20 * scalingFactor;
+        blastRadius = 100 * scalingFactor;
+        thermalRadius = 150 * scalingFactor;
+        lightBlastRadius = 300 * scalingFactor;
+
+        descriptions = `
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 20 m (120 m²)</span><br>Large but not catastrophic fireball with high heat.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius (20 psi):</strong> 100 m (0.03 km²)</span><br>Widespread severe damage to buildings, fatalities near the blast center.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius (5 psi):</strong> 150 m (0.07 km²)</span><br>Major structural damage in urban areas, casualties and fires.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius (1 psi):</strong> 300 m (0.28 km²)</span><br>Widespread damage to windows and doors, possible injuries across a large area.</li>
         `;
     }
 
@@ -90,14 +99,14 @@ function detonate() {
 
 // Event listener for preset selection to update yield
 document.getElementById('preset').addEventListener('change', function () {
-    let presetYield = 20; // Default value
+    let presetYield = 0.001; // Default for Hand Grenade
 
     if (this.value === 'hand_grenade') {
-        presetYield = 0.02; // 0.02 kilotons for Hand Grenade
+        presetYield = 0.001; // Hand Grenade (0.001 kilotons)
     } else if (this.value === 'c4') {
-        presetYield = 0.1; // 0.1 kilotons for C4
+        presetYield = 0.05; // C4 (0.05 kilotons)
     } else if (this.value === 'dynamite') {
-        presetYield = 0.05; // 0.05 kilotons for Dynamite
+        presetYield = 0.1; // Dynamite (0.1 kilotons)
     }
 
     // Update the yield input based on preset

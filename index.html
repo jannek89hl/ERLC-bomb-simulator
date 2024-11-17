@@ -3,115 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explosion Simulation Map</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        #map {
-            width: 80%;  /* Map takes 80% of the screen width */
-            height: 100%;
-            margin-left: 20%; /* Offset for the side panel */
-        }
-        #side-panel {
-            width: 20%;  /* Side panel takes 20% of the screen width */
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-            z-index: 1000; /* Ensure the panel stays on top */
-            max-height: 100vh;
-        }
-        #side-panel h2 {
-            margin-top: 0;
-        }
-        #side-panel button {
-            padding: 10px;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #side-panel button:hover {
-            background-color: #0056b3;
-        }
-        #detonation-details {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-        }
-        #detonation-details ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        #detonation-details li {
-            margin: 5px 0;
-        }
-        #map .leaflet-control-zoom {
-            position: absolute;
-            left: 85%; /* Move zoom control out of the side panel */
-            top: 10px;
-        }
-    </style>
+    <title>Explosion Simulator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="side-panel">
-        <h2>Explosion Simulator</h2>
-        <!-- Yield Presets and Custom Input -->
-        <label for="yield">Choose Yield:</label>
-        <select id="yield">
-            <option value="0.001">1 Ton</option>
-            <option value="0.1">100 Tons</option>
-            <option value="1">1 Kiloton</option>
-            <option value="10">10 Kilotons</option>
-            <option value="0.02">Grenade (0.02 KT)</option>
-            <option value="0.03">C4 (0.03 KT)</option>
-            <option value="0.1">Dynamite (0.1 KT)</option>
-        </select>
 
-        <br><br>
-
-        <!-- Custom yield input -->
-        <label for="custom-yield">Or enter custom yield (in kilotons):</label>
-        <input type="number" id="custom-yield" step="any" placeholder="Custom Yield" />
-
-        <br><br>
-
-        <!-- Burst Height -->
-        <label for="burst">Choose Burst Height:</label>
-        <select id="burst">
-            <option value="air">Air Burst</option>
-            <option value="surface">Surface Burst</option>
-        </select>
-
-        <br><br>
-
-        <!-- Detonate Button -->
-        <button id="detonate-btn">Detonate</button>
-
-        <!-- Detonation details will be populated here -->
-        <div id="detonation-details">
-            <!-- Dynamic explosion commentary will appear here -->
-        </div>
-    </div>
-
+    <!-- Map container -->
     <div id="map"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Sidebar UI -->
+    <div id="sidebar">
+        <h4>Explosion Settings</h4>
+        
+        <!-- Yield Selector -->
+        <label for="yield-selector">Select Yield:</label>
+        <select id="yield-selector" onchange="updateExplosion()">
+            <option value="1">1 Kiloton</option>
+            <option value="2">5 Kiloton</option>
+            <option value="3">10 Kiloton</option>
+            <option value="custom">Custom Yield</option>
+        </select>
+
+        <!-- Custom Yield Input -->
+        <label for="custom-yield">Custom Yield (in Kilotons):</label>
+        <input id="custom-yield" type="number" placeholder="Enter custom yield" style="display:none;" onchange="updateExplosion()" />
+
+        <h4>Explosion Details</h4>
+        <div id="explosion-details">
+            <div id="fireball-commentary"></div>
+            <div id="heavy-blast-commentary"></div>
+            <div id="moderate-blast-commentary"></div>
+            <div id="thermal-commentary"></div>
+            <div id="light-blast-commentary"></div>
+            <div id="no-thermal-commentary"></div>
+        </div>
+
+        <h4>Detonate</h4>
+        <button id="detonate-btn" onclick="detonate()">Detonate</button>
+
+        <!-- Clear All Button -->
+        <button id="clear-btn" onclick="clearAll()">Clear All</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

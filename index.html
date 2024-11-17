@@ -1,54 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explosion Simulator</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<div id="map" style="width: 100%; height: 500px;"></div>  <!-- The map container -->
 
-    <!-- Map container -->
-    <div id="map"></div>
+<!-- Dropdown to choose explosion preset -->
+<select id="preset-selector">
+    <option value="handGrenade">Hand Grenade</option>
+    <option value="dynamite">Dynamite</option>
+    <option value="custom">Custom Yield</option>
+</select>
 
-    <!-- Sidebar for controls -->
-    <div id="sidebar">
-        <h4>Explosion Settings</h4>
+<!-- Input for custom yield -->
+<input type="number" id="custom-yield" disabled placeholder="Enter yield in kilotons">
 
-        <!-- Yield Selector -->
-        <label for="preset-selector">Select Explosion Type:</label>
-        <select id="preset-selector" onchange="toggleCustomYield()">
-            <option value="hand_grenade">Hand Grenade (0.02 kt)</option>
-            <option value="dynamite">Dynamite (0.5 kt)</option>
-            <option value="c4">C4 (1.0 kt)</option>
-            <option value="custom">Custom Yield</option>
-        </select>
+<!-- Detonate Button -->
+<button id="detonate-button">Detonate</button>
 
-        <!-- Custom Yield Input -->
-        <div id="custom-yield-container" style="display:none;">
-            <label for="custom-yield">Custom Yield (in Kilotons):</label>
-            <input id="custom-yield" type="number" placeholder="Enter custom yield" onchange="updateExplosion()" />
-        </div>
-
-        <h4>Explosion Details</h4>
-        <div id="explosion-details">
-            <div id="fireball-commentary"></div>
-            <div id="heavy-blast-commentary"></div>
-            <div id="moderate-blast-commentary"></div>
-            <div id="thermal-commentary"></div>
-            <div id="light-blast-commentary"></div>
-            <div id="no-thermal-commentary"></div>
-        </div>
-
-        <h4>Detonate</h4>
-        <button id="detonate-btn" onclick="detonate()">Detonate</button>
-
-        <!-- Clear All Button -->
-        <button id="clear-btn" onclick="clearAll()">Clear All</button>
-    </div>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="map.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+<!-- Description Panels -->
+<div id="explosion-info">
+    <p id="fireball-commentary"></p>
+    <p id="heavy-blast-commentary"></p>
+    <p id="moderate-blast-commentary"></p>
+    <p id="thermal-commentary"></p>
+    <p id="light-blast-commentary"></p>
+    <p id="no-thermal-commentary"></p>
+</div>

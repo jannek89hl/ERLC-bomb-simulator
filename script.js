@@ -18,15 +18,24 @@ const radiusData = {
     }
 };
 
-// Map Initialization
-const map = L.map('map').setView([51.505, -0.09], 13); // Default location
+// Custom PNG map overlay settings (replace with your own image file path and coordinates)
+const imageUrl = 'path/to/your/image.png';  // Replace with the correct path to your PNG image
+const imageBounds = [
+    [50.0, -0.2], // Bottom left corner (Latitude, Longitude)
+    [51.5, 0.5]   // Top right corner (Latitude, Longitude)
+];
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+// Map Initialization
+const map = L.map('map').setView([51.0, 0], 13);  // Set initial center to cover your map area
+
+// Add your custom PNG image as an overlay on the map
+L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+// Set map view to the bounds of the image to fit it
+map.fitBounds(imageBounds);
 
 // Create a circle to represent explosion radius (temporary circle for demonstration)
-let explosionCircle = L.circle([51.505, -0.09], {
+let explosionCircle = L.circle([51.0, 0], {
     color: 'red',
     fillColor: '#f03',
     fillOpacity: 0.5,

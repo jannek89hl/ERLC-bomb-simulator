@@ -3,102 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Bomb Simulator</title>
-    
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css" />
+    <title>Explosion Simulation Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #map {
+            height: 70vh;  /* Map takes up 70% of the screen height */
+            width: 100%;
+        }
+        #detonation-details {
+            max-height: 30vh;  /* Rest of the screen space for the details */
+            overflow-y: auto;  /* Scrollable if content exceeds max-height */
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        #detonation-details ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        #detonation-details li {
+            margin: 5px 0;
+        }
+        .circle-description {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Map Container -->
+    <h1>Explosion Simulation Map</h1>
+
     <div id="map"></div>
-
-    <!-- Sidebar UI -->
-    <div id="sidebar">
-        <label for="yield">Bomb Yield (kt):</label>
-        <input type="number" id="yield" value="0.02">
-        
-        <label for="preset">Preset:</label>
-        <select id="preset">
-            <option value="">Select Preset</option>
-            <option value="hand_grenade">Hand Grenade</option>
-            <option value="c4">C4</option>
-            <option value="dynamite">Dynamite</option>
-        </select>
-
-        <hr>
-
-        <label for="burst">Height of Burst:</label>
-        <select id="burst">
-            <option value="airburst">Airburst</option>
-            <option value="surface">Surface</option>
-        </select>
-
-        <div id="advanced-options" style="display:none;">
-            <h4>Airburst Settings:</h4>
-            <label for="optimize-overpressure">Optimize for overpressure: 5 psi</label>
-            <input type="checkbox" id="optimize-overpressure">
-
-            <label for="burst-height">Burst Height (in meters):</label>
-            <input type="number" id="burst-height" value="100">
-
-            <h4>Show Overpressure Rings:</h4>
-            <label for="overpressure-20psi">20 psi (Heavy damage)</label>
-            <input type="checkbox" id="overpressure-20psi" checked>
-
-            <label for="overpressure-5psi">5 psi (Medium damage)</label>
-            <input type="checkbox" id="overpressure-5psi" checked>
-
-            <label for="overpressure-1psi">1 psi (Light damage)</label>
-            <input type="checkbox" id="overpressure-1psi">
-
-            <h4>Ionizing Radiation Rings:</h4>
-            <label for="ionizing-100rem">100 rem (Sickness)</label>
-            <input type="checkbox" id="ionizing-100rem" checked>
-
-            <label for="ionizing-500rem">500 rem (50-90% Mortality)</label>
-            <input type="checkbox" id="ionizing-500rem" checked>
-
-            <h4>Thermal Radiation Rings:</h4>
-            <label for="thermal-3rd-degree">Third degree burns (100% Probability)</label>
-            <input type="checkbox" id="thermal-3rd-degree" checked>
-
-            <label for="thermal-2nd-degree">Second degree burns (50% Probability)</label>
-            <input type="checkbox" id="thermal-2nd-degree">
-
-            <h4>Other Effects:</h4>
-            <label for="fireball">Fireball</label>
-            <input type="checkbox" id="fireball" checked>
-
-            <label for="crater">Crater</label>
-            <input type="checkbox" id="crater">
-
-            <label for="fallout">Fallout</label>
-            <input type="checkbox" id="fallout">
-
-            <label for="wind-speed">Wind speed: 15 mph</label>
-            <input type="number" id="wind-speed" value="15">
-        </div>
-
-        <hr>
-
-        <button id="detonate">Detonate</button>
-        <button id="clear-effects">Clear All Effects</button>
-
-        <div id="detonation-info" style="display:none;">
-            <h4>Detonation Details:</h4>
-            <ul id="detonation-details">
-                <!-- Dynamic detonation information will go here -->
-            </ul>
-        </div>
+    <div id="detonation-details">
+        <!-- Dynamic explosion commentary will appear here -->
     </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-    <!-- Custom JS -->
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="map.js"></script>  <!-- External JavaScript file -->
 </body>
 </html>

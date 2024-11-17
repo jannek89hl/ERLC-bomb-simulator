@@ -31,7 +31,7 @@
         <hr>
 
         <label for="burst">Height of Burst:</label>
-        <select id="burst" disabled>
+        <select id="burst">
             <option value="airburst">Airburst</option>
             <option value="surface">Surface</option>
         </select>
@@ -86,6 +86,13 @@
 
         <button id="detonate">Detonate</button>
         <button id="clear-effects">Clear All Effects</button>
+
+        <div id="detonation-info" style="display:none;">
+            <h4>Detonation Details:</h4>
+            <ul id="detonation-details">
+                <!-- Dynamic detonation information will go here -->
+            </ul>
+        </div>
     </div>
 
     <!-- Leaflet JS -->

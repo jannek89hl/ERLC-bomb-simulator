@@ -2,37 +2,124 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Slight gray background for contrast */
 }
 
 /* Map Container */
 #map {
     height: 100vh; /* Full-screen height */
+    margin-left: 20%; /* Offset for sidebar */
 }
 
 /* Sidebar UI */
 #sidebar {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.85); /* Slightly transparent background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    width: 300px;
+    width: 280px;
+    height: 100%;
+    overflow-y: auto;
 }
 
+/* Sidebar Header */
+#sidebar h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Input, Select, and Button Styling */
 #sidebar label {
     display: block;
-    margin-top: 10px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
 }
 
-#sidebar input, #sidebar select, #sidebar button {
-    display: block;
-    margin-top: 5px;
+/* Refined Input Fields */
+#sidebar input, 
+#sidebar select, 
+#sidebar button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+#sidebar input:focus, 
+#sidebar select:focus,
+#sidebar button:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Button Styles */
+#sidebar button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#sidebar button:hover {
+    background-color: #0056b3;
+}
+
+/* Detonation Details Section */
+#detonation-details {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#detonation-details h4 {
+    font-size: 20px;
+    color: #333;
+    text-align: center;
     margin-bottom: 10px;
 }
 
-h4 {
-    margin-top: 20px;
+#detonation-details ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#detonation-details li {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Improved Readability of Commentaries */
+#detonation-details li strong {
+    color: #333;
+}
+
+/* Zoom Control Fix */
+.leaflet-control-zoom {
+    position: absolute;
+    left: 85%;
+    top: 20px;
+}
+
+/* Hover Effect on the UI Elements */
+#sidebar input:hover, 
+#sidebar select:hover,
+#sidebar button:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }

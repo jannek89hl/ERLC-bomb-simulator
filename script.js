@@ -14,8 +14,20 @@ map.fitBounds(bounds);
 const marker = L.marker([1100, 1100], { draggable: true }).addTo(map);
 marker.bindPopup("Explosion Point").openPopup();
 
-// Calculate damage radii and effects
-document.getElementById('detonate').addEventListener('click', function () {
+// Store existing explosion circles
+let explosionCircles = [];
+
+// Function to clear previous explosions
+function clearExplosionCircles() {
+    // Remove each circle from the map
+    explosionCircles.forEach(circle => {
+        map.removeLayer(circle);
+    });
+    explosionCircles = []; // Reset the array
+}
+
+// Function to detonate the bomb
+function detonate() {
     const yield = parseFloat(document.getElementById('yield').value);
     const burst = document.getElementById('burst').value;
     const fallout = document.getElementById('fallout').checked;
@@ -35,9 +47,37 @@ document.getElementById('detonate').addEventListener('click', function () {
         console.log('Radioactive Fallout: Not included');
     }
 
+    // Clear any existing explosions
+    clearExplosionCircles();
+
     // Visualize the radii on the map
-    L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red' }).addTo(map).bindPopup('Fireball');
-    L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange' }).addTo(map).bindPopup('Blast Damage');
-    L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow' }).addTo(map).bindPopup('Thermal Radiation');
+    const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red' }).addTo(map).bindPopup('Fireball');
+    const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange' }).addTo(map).bindPopup('Blast Damage');
+    const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow' }).addTo(map).bindPopup('Thermal Radiation');
+
+    // Store the new explosion circles
+    explosionCircles.push(fireballCircle, blastCircle, thermalCircle);
+}
+
+// Set predefined explosive types
+document.getElementById('preset').addEventListener('change', function() {
+    const preset = this.value;
+    switch(preset) {
+        case 'hand_grenade':
+            document.getElementById('yield').value = 0.02; // 20 tons
+            break;
+        case 'c4':
+            document.getElementById('yield').value = 0.5; // 500 tons
+            break;
+        case 'dynamite':
+            document.getElementById('yield').value = 0.1; // 100 tons
+            break;
+        default:
+            document.getElementById('yield').value = 20; // Default value
+            break;
+    }
 });
+
+// Event listener for detonation button
+document.getElementById('detonate').addEventListener('click', detonate);
 

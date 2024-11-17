@@ -26,7 +26,11 @@ function clearExplosionCircles() {
 
 // Detonate the bomb and calculate explosion effects
 function detonate() {
-    const yieldValue = parseFloat(document.getElementById('yield').value) || parseFloat(document.getElementById('custom-yield').value);
+    let yieldValue = parseFloat(document.getElementById('yield').value);
+    if (document.getElementById('custom-yield').value) {
+        yieldValue = parseFloat(document.getElementById('custom-yield').value);  // Custom yield
+    }
+
     const burstHeight = document.getElementById('burst').value;
     const scalingFactor = 0.533;  // Scaling factor for image-based map
 
@@ -41,44 +45,49 @@ function detonate() {
         thermalRadius = 363 * scalingFactor;
         lightBlastRadius = 930 * scalingFactor;
         descriptions = `
-            <li><strong>Fireball radius:</strong> 67 m</li>
-            <li><strong>Heavy blast damage (20 psi):</strong> 173 m</li>
-            <li><strong>Moderate blast damage (5 psi):</strong> 363 m</li>
-            <li><strong>Light blast damage (1 psi):</strong> 930 m</li>
+            <li style="color: orange;"><strong>Fireball radius:</strong> 67 m</li>
+            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 173 m</li>
+            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 363 m</li>
+            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 930 m</li>
         `;
-    } else if (yieldValue === 0.1) {  // 100 Tons
-        fireballRadius = 210 * scalingFactor;
-        blastRadius = 430 * scalingFactor;
-        thermalRadius = 870 * scalingFactor;
-        lightBlastRadius = 2000 * scalingFactor;
+    } else if (yieldValue === 0.02) {  // Grenade
+        fireballRadius = 13 * scalingFactor;
+        blastRadius = 33 * scalingFactor;
+        thermalRadius = 69 * scalingFactor;
+        lightBlastRadius = 174 * scalingFactor;
         descriptions = `
-            <li><strong>Fireball radius:</strong> 210 m</li>
-            <li><strong>Heavy blast damage (20 psi):</strong> 430 m</li>
-            <li><strong>Moderate blast damage (5 psi):</strong> 870 m</li>
-            <li><strong>Light blast damage (1 psi):</strong> 2000 m</li>
+            <li style="color: orange;"><strong>Fireball radius:</strong> 13 m</li>
+            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 33 m</li>
+            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 69 m</li>
+            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 174 m</li>
         `;
-    } else if (yieldValue === 1) {  // 1 Kiloton
-        fireballRadius = 670 * scalingFactor;
-        blastRadius = 1730 * scalingFactor;
-        thermalRadius = 3630 * scalingFactor;
-        lightBlastRadius = 9300 * scalingFactor;
+    } else if (yieldValue === 0.03) {  // C4
+        fireballRadius = 20 * scalingFactor;
+        blastRadius = 50 * scalingFactor;
+        thermalRadius = 103 * scalingFactor;
+        lightBlastRadius = 258 * scalingFactor;
         descriptions = `
-            <li><strong>Fireball radius:</strong> 670 m</li>
-            <li><strong>Heavy blast damage (20 psi):</strong> 1730 m</li>
-            <li><strong>Moderate blast damage (5 psi):</strong> 3630 m</li>
-            <li><strong>Light blast damage (1 psi):</strong> 9300 m</li>
+            <li style="color: orange;"><strong>Fireball radius:</strong> 20 m</li>
+            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 50 m</li>
+            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 103 m</li>
+            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 258 m</li>
         `;
-    } else if (yieldValue === 10) {  // 10 Kilotons
-        fireballRadius = 2100 * scalingFactor;
-        blastRadius = 4300 * scalingFactor;
-        thermalRadius = 8700 * scalingFactor;
-        lightBlastRadius = 20000 * scalingFactor;
+    } else if (yieldValue === 0.1) {  // Dynamite
+        fireballRadius = 35 * scalingFactor;
+        blastRadius = 88 * scalingFactor;
+        thermalRadius = 183 * scalingFactor;
+        lightBlastRadius = 460 * scalingFactor;
         descriptions = `
-            <li><strong>Fireball radius:</strong> 2100 m</li>
-            <li><strong>Heavy blast damage (20 psi):</strong> 4300 m</li>
-            <li><strong>Moderate blast damage (5 psi):</strong> 8700 m</li>
-            <li><strong>Light blast damage (1 psi):</strong> 20000 m</li>
+            <li style="color: orange;"><strong>Fireball radius:</strong> 35 m</li>
+            <li style="color: red;"><strong>Heavy blast damage (20 psi):</strong> 88 m</li>
+            <li style="color: yellow;"><strong>Moderate blast damage (5 psi):</strong> 183 m</li>
+            <li style="color: pink;"><strong>Light blast damage (1 psi):</strong> 460 m</li>
         `;
+    } else {
+        fireballRadius = 100 * scalingFactor;
+        blastRadius = 250 * scalingFactor;
+        thermalRadius = 500 * scalingFactor;
+        lightBlastRadius = 1250 * scalingFactor;
     }
 
     // Clear previous explosion circles

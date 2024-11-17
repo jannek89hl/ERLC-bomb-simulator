@@ -1,1 +1,33 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
+/* Map Container */
+#map {
+    height: 100vh; /* Full-screen height */
+}
+
+/* Sidebar UI */
+#sidebar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#sidebar label {
+    display: block;
+    margin-top: 10px;
+}
+
+#sidebar input, #sidebar select, #sidebar button {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

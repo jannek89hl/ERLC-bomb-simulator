@@ -19,96 +19,39 @@ let explosionCircles = [];
 
 // Function to clear previous explosions
 function clearExplosionCircles() {
-    // Remove each circle from the map
-    explosionCircles.forEach(circle => {
-        map.removeLayer(circle);
-    });
-    explosionCircles = []; // Reset the array
+    explosionCircles.forEach(circle => map.removeLayer(circle));
+    explosionCircles = [];
 }
 
 // Function to detonate the bomb and calculate explosion radii
 function detonate() {
-    const yield = parseFloat(document.getElementById('yield').value);
-    const burst = document.getElementById('burst').value;
-    const fallout = document.getElementById('fallout').checked;
+    const yieldValue = parseFloat(document.getElementById('yield').value);
+    const burstHeight = parseFloat(document.getElementById('burst-height').value);
 
-    // Example formulas for radii
     const scalingFactor = 0.533; // 1 pixel = 0.533 meters (scaled to map)
-    
-    const fireballRadius = Math.pow(yield, 1 / 3) * 10 * scalingFactor; // Fireball radius (meters)
-    const blastRadius = Math.pow(yield, 1 / 3) * 50 * scalingFactor;   // Blast damage radius (meters)
-    const thermalRadius = Math.pow(yield, 1 / 3) * 100 * scalingFactor; // Thermal radiation radius (meters)
 
-    // Log the results
+    const fireballRadius = Math.pow(yieldValue, 1 / 3) * 10 * scalingFactor;
+    const blastRadius = Math.pow(yieldValue, 1 / 3) * 50 * scalingFactor;
+    const thermalRadius = Math.pow(yieldValue, 1 / 3) * 100 * scalingFactor;
+
     console.log(`Fireball Radius: ${fireballRadius.toFixed(2)} m`);
     console.log(`Blast Damage Radius: ${blastRadius.toFixed(2)} m`);
     console.log(`Thermal Radiation Radius: ${thermalRadius.toFixed(2)} m`);
-    if (fallout) {
-        console.log('Radioactive Fallout: Included');
-    } else {
-        console.log('Radioactive Fallout: Not included');
-    }
 
-    // Clear any existing explosions
     clearExplosionCircles();
 
-    // Visualize the radii on the map (without popups)
     const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red' }).addTo(map);
     const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange' }).addTo(map);
     const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow' }).addTo(map);
 
-    // Store the new explosion circles
     explosionCircles.push(fireballCircle, blastCircle, thermalCircle);
 }
 
-// Set predefined explosive types and yield values
-document.getElementById('preset').addEventListener('change', function() {
-    const preset = this.value;
-    switch(preset) {
-        case 'hand_grenade':
-            document.getElementById('yield').value = 0.02; // 20 tons (hand grenade)
-            break;
-        case 'c4':
-            document.getElementById('yield').value = 0.5; // 500 tons (C4)
-            break;
-        case 'dynamite':
-            document.getElementById('yield').value = 0.1; // 100 tons (dynamite)
-            break;
-        default:
-            document.getElementById('yield').value = 20; // Default value (big bomb)
-            break;
-    }
-    // Clear any existing explosions when the preset is changed
-    clearExplosionCircles();
-});
-
-// Event listener for detonation button
+// Event listeners
 document.getElementById('detonate').addEventListener('click', detonate);
 
-// Function to update explosion position when the marker is dragged
-marker.on('drag', function() {
-    // Clear any existing explosions and only detonate when the button is clicked
-    if (document.getElementById('detonate').disabled) return; // Don't detonate while dragging
+document.getElementById('clear-effects').addEventListener('click', function() {
     clearExplosionCircles();
-});
-
-// Add a shadow under the marker and lift it when dragging
-marker.on('dragstart', function() {
-    // Lift the marker slightly during drag by changing zIndexOffset
-    marker.setZIndexOffset(1000); // Move the marker above others
-});
-
-marker.on('dragend', function() {
-    // Reset the lift effect when dragging ends
-    marker.setZIndexOffset(0);
-});
-
-// Disable detonation until a preset is selected
-document.getElementById('detonate').disabled = true;
-document.getElementById('preset').addEventListener('change', function() {
-    if (this.value !== "") {
-        document.getElementById('detonate').disabled = false; // Enable detonate after selecting preset
-    } else {
-        document.getElementById('detonate').disabled = true; // Disable if no preset selected
-    }
+    document.getElementById('burst').disabled = false;
+    document.getElementById('advanced-options').style.display = 'none';
 });

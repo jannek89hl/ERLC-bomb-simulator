@@ -99,7 +99,7 @@ function detonate() {
 
 // Event listener for preset selection to update yield
 document.getElementById('preset').addEventListener('change', function () {
-    let presetYield = 0.001; // Default for Hand Grenade
+    let presetYield = 0; // Default for custom preset
 
     if (this.value === 'hand_grenade') {
         presetYield = 0.001; // Hand Grenade (0.001 kilotons)
@@ -107,10 +107,26 @@ document.getElementById('preset').addEventListener('change', function () {
         presetYield = 0.05; // C4 (0.05 kilotons)
     } else if (this.value === 'dynamite') {
         presetYield = 0.1; // Dynamite (0.1 kilotons)
+    } else if (this.value === 'none') {
+        presetYield = 0; // Custom yield
     }
 
     // Update the yield input based on preset
     document.getElementById('yield').value = presetYield;
+
+    // Update the yield input behavior for custom entry
+    if (presetYield === 0) {
+        document.getElementById('yield').disabled = false; // Enable custom yield input
+    } else {
+        document.getElementById('yield').disabled = true; // Disable custom yield input
+    }
+});
+
+// Event listener for custom yield input
+document.getElementById('yield').addEventListener('input', function () {
+    if (this.value !== "") {
+        document.getElementById('preset').value = "none"; // Set preset to 'none' when custom input is used
+    }
 });
 
 // Detonate button event listener

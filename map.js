@@ -1,69 +1,73 @@
+// Initialize the map with simple coordinate system (image-based)
 const map = L.map('map', {
-    crs: L.CRS.Simple,  // Use simple coordinate system for an image-based map
+    crs: L.CRS.Simple,  // Use simple coordinate system for the image-based map
     minZoom: -2,        // Zoom out limit for the image map
     maxZoom: 2,         // Zoom in limit for the image map
 });
 
-const bounds = [[0, 0], [2200, 2200]];  // Define bounds based on the image size
-const image = L.imageOverlay('5-10-24.png', bounds).addTo(map);  // Your custom PNG image for the map
+// Define the bounds of the map based on the image size (2200 x 2200)
+const bounds = [[0, 0], [2200, 2200]];  // Image size is 2200 x 2200 pixels
+const image = L.imageOverlay('10-5-24.png', bounds).addTo(map);  // Load the correct PNG file
 
-map.fitBounds(bounds);  // Fit map to the image bounds
+// Fit the map to the bounds of the image
+map.fitBounds(bounds);
 
-// Add a draggable marker for explosion center (without popup text for better visibility)
+// Create a draggable marker to represent the explosion center
 const marker = L.marker([1100, 1100], { 
     draggable: true, 
-    icon: L.divIcon({ className: 'marker' }) 
+    icon: L.divIcon({ className: 'marker' })  // Marker style
 }).addTo(map);
 
 // Store explosion circles
 let explosionCircles = [];
 
-// Function to clear previous explosion circles
+// Clear previous explosion circles when updating the explosion
 function clearExplosionCircles() {
     explosionCircles.forEach(circle => map.removeLayer(circle));
     explosionCircles = [];
 }
 
-// Function to update marker position
+// Update explosion when marker is dragged
 marker.on('drag', function() {
     updateExplosion();
 });
 
-// Add click event to the map to move the marker when clicked
+// Add click event to move the marker to clicked location
 map.on('click', function(e) {
-    marker.setLatLng(e.latlng);  // Move the marker to the clicked location
-    updateExplosion();  // Update explosion effects based on new marker position
+    marker.setLatLng(e.latlng);  // Move the marker to clicked point
+    updateExplosion();  // Update the explosion effects
 });
 
-// Data for predefined explosion radii (in meters)
+// Data for predefined explosion presets (radius values in meters)
 const radiusData = {
     "handGrenade": {
-        fireball: { radius: 18.5, description: "Maximum size of the nuclear fireball; relevance to damage on the ground depends on the height of detonation. If it touches the ground, the amount of radioactive fallout is significantly increased. Anything inside the fireball is effectively vaporized." },
-        heavyBlast: { radius: 59.1, description: "At 20 psi overpressure, heavily built concrete buildings are severely damaged or demolished; fatalities approach 100%. Often used as a benchmark for heavy damage in cities." },
-        moderateBlast: { radius: 124, description: "At 5 psi overpressure, most residential buildings collapse, injuries are universal, fatalities are widespread. The chances of a fire starting in commercial and residential damage are high, and buildings so damaged are at high risk of spreading fire." },
-        thermal: { radius: 136, description: "Third degree burns extend throughout the layers of skin, and are often painless because they destroy the pain nerves. They can cause severe scarring or disablement, and can require amputation. 100% probability for 3rd degree burns at this yield is 7.07 cal/cm²." },
-        lightBlast: { radius: 319, description: "At around 1 psi overpressure, glass windows can be expected to break. This can cause many injuries in a surrounding population who comes to a window after seeing the flash of a nuclear explosion." },
-        noThermal: { radius: 329, description: "The distance at which anybody beyond would definitely suffer no damage from thermal radiation (heat). 100% probability of no significant thermal damage at this yield is 0.13 cal/cm²." }
+        fireball: { radius: 18.5, description: "Maximum size of the fireball; anything inside is vaporized." },
+        heavyBlast: { radius: 59.1, description: "Heavy blast damage, concrete buildings severely damaged." },
+        moderateBlast: { radius: 124, description: "Moderate blast; residential buildings collapse." },
+        thermal: { radius: 136, description: "Thermal radiation causing 3rd-degree burns." },
+        lightBlast: { radius: 319, description: "Light blast; glass windows break, causing injuries." },
+        noThermal: { radius: 329, description: "Beyond this range, no significant thermal damage." }
     },
     "dynamite": {
-        fireball: { radius: 67, description: "Maximum size of the nuclear fireball; relevance to damage on the ground depends on the height of detonation. If it touches the ground, the amount of radioactive fallout is significantly increased. Anything inside the fireball is effectively vaporized." },
-        heavyBlast: { radius: 173, description: "At 20 psi overpressure, heavily built concrete buildings are severely damaged or demolished; fatalities approach 100%. Often used as a benchmark for heavy damage in cities." },
-        moderateBlast: { radius: 363, description: "At 5 psi overpressure, most residential buildings collapse, injuries are universal, fatalities are widespread. The chances of a fire starting in commercial and residential damage are high, and buildings so damaged are at high risk of spreading fire." },
-        thermal: { radius: 399, description: "Third degree burns extend throughout the layers of skin, and are often painless because they destroy the pain nerves. They can cause severe scarring or disablement, and can require amputation. 100% probability for 3rd degree burns at this yield is 6.65 cal/cm²." },
-        lightBlast: { radius: 930, description: "At around 1 psi overpressure, glass windows can be expected to break. This can cause many injuries in a surrounding population who comes to a window after seeing the flash of a nuclear explosion." },
-        noThermal: { radius: 960, description: "The distance at which anybody beyond would definitely suffer no damage from thermal radiation (heat). 100% probability of no significant thermal damage at this yield is 1.05 cal/cm²." }
+        fireball: { radius: 67, description: "Fireball size, vaporizing everything inside." },
+        heavyBlast: { radius: 173, description: "Heavy blast damage, severe destruction." },
+        moderateBlast: { radius: 363, description: "Moderate blast; significant damage to buildings." },
+        thermal: { radius: 399, description: "Thermal radiation causing severe burns." },
+        lightBlast: { radius: 930, description: "Light blast; widespread window damage." },
+        noThermal: { radius: 960, description: "Beyond this point, no significant thermal damage." }
     }
 };
 
-// Function to update explosion details based on marker position and yield
+// Function to update explosion effect (calculates the radii and displays)
 function updateExplosion() {
     const preset = document.getElementById('preset-selector').value;
     const customYield = parseFloat(document.getElementById('custom-yield').value);
 
     let yieldData = radiusData[preset];
 
+    // If custom yield is chosen, calculate new radii
     if (preset === "custom" && customYield > 0) {
-        const scaleFactor = customYield / 1; // Example: scale factor (custom yield vs 1.0 kiloton)
+        const scaleFactor = customYield / 1; // Custom scaling factor (1 kiloton as reference)
         yieldData = {
             fireball: { radius: round(customYield * 18.5), description: "Custom explosion (Fireball)" },
             heavyBlast: { radius: round(customYield * 59.1), description: "Custom explosion (Heavy Blast)" },
@@ -74,10 +78,10 @@ function updateExplosion() {
         };
     }
 
-    // Clear previous explosion circles
+    // Clear previous explosion circles before drawing new ones
     clearExplosionCircles();
 
-    // Place new explosion circles
+    // Create explosion circles with radius and description based on the selected preset or custom yield
     placeExplosionCircle(marker.getLatLng(), yieldData.fireball.radius, "Fireball Radius", yieldData.fireball.description);
     placeExplosionCircle(marker.getLatLng(), yieldData.heavyBlast.radius, "Heavy Blast Radius", yieldData.heavyBlast.description);
     placeExplosionCircle(marker.getLatLng(), yieldData.moderateBlast.radius, "Moderate Blast Radius", yieldData.moderateBlast.description);
@@ -85,21 +89,21 @@ function updateExplosion() {
     placeExplosionCircle(marker.getLatLng(), yieldData.lightBlast.radius, "Light Blast Radius", yieldData.lightBlast.description);
     placeExplosionCircle(marker.getLatLng(), yieldData.noThermal.radius, "No Thermal Radiation Radius", yieldData.noThermal.description);
 
-    // Update UI with radius descriptions
-    document.getElementById('fireball-commentary').innerHTML = `Fireball radius: ${yieldData.fireball.radius} m (${Math.round(yieldData.fireball.radius ** 2)} m²) - ${yieldData.fireball.description}`;
-    document.getElementById('heavy-blast-commentary').innerHTML = `Heavy blast radius (20 psi): ${yieldData.heavyBlast.radius} m - ${yieldData.heavyBlast.description}`;
-    document.getElementById('moderate-blast-commentary').innerHTML = `Moderate blast radius (5 psi): ${yieldData.moderateBlast.radius} m - ${yieldData.moderateBlast.description}`;
-    document.getElementById('thermal-commentary').innerHTML = `Thermal radiation radius (3rd degree burns): ${yieldData.thermal.radius} m - ${yieldData.thermal.description}`;
-    document.getElementById('light-blast-commentary').innerHTML = `Light blast radius (1 psi): ${yieldData.lightBlast.radius} m - ${yieldData.lightBlast.description}`;
-    document.getElementById('no-thermal-commentary').innerHTML = `No thermal radiation radius: ${yieldData.noThermal.radius} m - ${yieldData.noThermal.description}`;
+    // Update UI with the calculated radius descriptions
+    document.getElementById('fireball-commentary').innerHTML = `Fireball radius: ${yieldData.fireball.radius} m - ${yieldData.fireball.description}`;
+    document.getElementById('heavy-blast-commentary').innerHTML = `Heavy blast radius: ${yieldData.heavyBlast.radius} m - ${yieldData.heavyBlast.description}`;
+    document.getElementById('moderate-blast-commentary').innerHTML = `Moderate blast radius: ${yieldData.moderateBlast.radius} m - ${yieldData.moderateBlast.description}`;
+    document.getElementById('thermal-commentary').innerHTML = `Thermal radiation radius: ${yieldData.thermal.radius} m - ${yieldData.thermal.description}`;
+    document.getElementById('light-blast-commentary').innerHTML = `Light blast radius: ${yieldData.lightBlast.radius} m - ${yieldData.lightBlast.description}`;
+    document.getElementById('no-thermal-commentary').innerHTML = `No thermal damage radius: ${yieldData.noThermal.radius} m - ${yieldData.noThermal.description}`;
 }
 
-// Function to round numbers to a fixed number of decimals
+// Function to round numbers to a reasonable precision
 function round(num, decimals = 2) {
     return Number(num.toFixed(decimals));
 }
 
-// Function to place an explosion circle on the map
+// Function to place explosion circles with radius and description
 function placeExplosionCircle(center, radius, name, description) {
     const circle = L.circle(center, {
         radius: radius,
@@ -112,5 +116,5 @@ function placeExplosionCircle(center, radius, name, description) {
     explosionCircles.push(circle);
 }
 
-// Event listener for detonating explosion
+// Event listener for detonating the explosion when the button is clicked
 document.getElementById('detonate-button').addEventListener('click', updateExplosion);

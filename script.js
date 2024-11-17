@@ -36,7 +36,6 @@ function detonate() {
     // Define explosion radii based on yield (in kilotons)
     let fireballRadius, blastRadius, thermalRadius, lightBlastRadius;
     let descriptions = '';
-    let textColor = '';
 
     if (yieldValue === 0.001) { // Hand Grenade
         fireballRadius = 2 * scalingFactor;
@@ -45,10 +44,10 @@ function detonate() {
         lightBlastRadius = 25 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 2 m</span><br>A very small explosion.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 6 m</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 10 m</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 25 m</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 2 m</span><br>A very small explosion with high heat.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 6 m</span><br>Severe damage in a small area.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 10 m</span><br>Moderate blast impact.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 25 m</span><br>Light blast effect and injury radius.</li>
         `;
     } else if (yieldValue === 0.05) { // C4
         fireballRadius = 10 * scalingFactor;
@@ -57,10 +56,10 @@ function detonate() {
         lightBlastRadius = 150 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 10 m</span><br>Small but concentrated explosion.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 40 m</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 60 m</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 150 m</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 10 m</span><br>Intense fireball radius, burns in proximity.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 40 m</span><br>Significant damage from blast.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 60 m</span><br>Major impact in this zone.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 150 m</span><br>Light blast effects, broken windows, etc.</li>
         `;
     } else if (yieldValue === 0.1) { // Dynamite
         fireballRadius = 20 * scalingFactor;
@@ -69,10 +68,10 @@ function detonate() {
         lightBlastRadius = 300 * scalingFactor;
 
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 20 m</span><br>Large explosion with high heat.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 100 m</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 150 m</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 300 m</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 20 m</span><br>Large fireball radius, dangerous burns within.</li>
+            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 100 m</span><br>Severe blast effects within this radius.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 150 m</span><br>Serious damage within this radius.</li>
+            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 300 m</span><br>Light blast effects, debris and windows shattering.</li>
         `;
     }
 
@@ -103,20 +102,13 @@ function detonate() {
 // Event listener for preset selection
 document.getElementById('preset').addEventListener('change', function () {
     const preset = this.value;
-    const customYieldContainer = document.getElementById('custom-yield-container');
 
-    if (preset === 'custom') {
-        customYieldContainer.style.display = 'block'; // Show custom yield input
-    } else {
-        customYieldContainer.style.display = 'none'; // Hide custom yield input
-        // Optionally reset to the preset yield when another preset is selected
-        if (preset === 'hand_grenade') {
-            document.getElementById('yield').value = 0.001;
-        } else if (preset === 'c4') {
-            document.getElementById('yield').value = 0.05;
-        } else if (preset === 'dynamite') {
-            document.getElementById('yield').value = 0.1;
-        }
+    if (preset === 'hand_grenade') {
+        document.getElementById('yield').value = 0.001;
+    } else if (preset === 'c4') {
+        document.getElementById('yield').value = 0.05;
+    } else if (preset === 'dynamite') {
+        document.getElementById('yield').value = 0.1;
     }
 });
 

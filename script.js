@@ -34,6 +34,21 @@ const radiusData = {
     }
 };
 
+// Function to toggle the custom yield input field visibility
+function toggleCustomYield() {
+    const preset = document.getElementById('preset-selector').value;
+    const customYieldContainer = document.getElementById('custom-yield-container');
+
+    if (preset === 'custom') {
+        customYieldContainer.style.display = 'block';
+    } else {
+        customYieldContainer.style.display = 'none';
+    }
+
+    // Update explosion if a custom yield is already entered
+    updateExplosion();
+}
+
 // Function to update the explosion based on user selection
 function updateExplosion() {
     const preset = document.getElementById('preset-selector').value;
@@ -54,16 +69,20 @@ function updateExplosion() {
     }
 
     // Update UI with calculated radii
-    document.getElementById('fireball-commentary').innerHTML = `${yieldData.fireball.radius.toFixed(1)} m - ${yieldData.fireball.description}`;
-    document.getElementById('heavy-blast-commentary').innerHTML = `${yieldData.heavyBlast.radius.toFixed(1)} m - ${yieldData.heavyBlast.description}`;
-    document.getElementById('moderate-blast-commentary').innerHTML = `${yieldData.moderateBlast.radius.toFixed(1)} m - ${yieldData.moderateBlast.description}`;
-    document.getElementById('thermal-commentary').innerHTML = `${yieldData.thermal.radius.toFixed(1)} m - ${yieldData.thermal.description}`;
-    document.getElementById('light-blast-commentary').innerHTML = `${yieldData.lightBlast.radius.toFixed(1)} m - ${yieldData.lightBlast.description}`;
-    document.getElementById('no-thermal-commentary').innerHTML = `${yieldData.noThermal.radius.toFixed(1)} m - ${yieldData.noThermal.description}`;
+    document.getElementById('fireball-commentary').innerHTML = `Fireball radius: ${yieldData.fireball.radius} m`;
+    document.getElementById('heavy-blast-commentary').innerHTML = `Heavy blast damage radius: ${yieldData.heavyBlast.radius} m`;
+    document.getElementById('moderate-blast-commentary').innerHTML = `Moderate blast damage radius: ${yieldData.moderateBlast.radius} m`;
+    document.getElementById('thermal-commentary').innerHTML = `Thermal radiation radius: ${yieldData.thermal.radius} m`;
+    document.getElementById('light-blast-commentary').innerHTML = `Light blast damage radius: ${yieldData.lightBlast.radius} m`;
+    document.getElementById('no-thermal-commentary').innerHTML = `No thermal radiation radius: ${yieldData.noThermal.radius} m`;
 
-    // Update explosion circle on the map based on the new radii
     clearExplosionCircles();
-    explosionCircles.push(L.circle(marker.getLatLng(), yieldData.fireball.radius, { color: 'red', fillColor: '#f03', fillOpacity: 0.2 }).addTo(map));
+    updateExplosionCircles(yieldData);
+}
+
+// Update the circles based on the explosion data
+function updateExplosionCircles(yieldData) {
+    explosionCircles.push(L.circle(marker.getLatLng(), yieldData.fireball.radius, { color: 'red', fillColor: '#f00', fillOpacity: 0.2 }).addTo(map));
     explosionCircles.push(L.circle(marker.getLatLng(), yieldData.heavyBlast.radius, { color: 'orange', fillColor: '#f90', fillOpacity: 0.2 }).addTo(map));
     explosionCircles.push(L.circle(marker.getLatLng(), yieldData.moderateBlast.radius, { color: 'yellow', fillColor: '#ff0', fillOpacity: 0.2 }).addTo(map));
     explosionCircles.push(L.circle(marker.getLatLng(), yieldData.thermal.radius, { color: 'blue', fillColor: '#00f', fillOpacity: 0.2 }).addTo(map));

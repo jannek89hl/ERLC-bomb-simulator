@@ -3,46 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERLC Bomb Simulator</title>
+    <title>Roblox Bomb Simulator</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     
-    <!-- Custom Styles -->
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        #map {
-            height: 100vh; /* Full screen height */
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Map Div -->
+    <!-- Map Container -->
     <div id="map"></div>
+
+    <!-- Sidebar UI -->
+    <div id="sidebar">
+        <label for="yield">Bomb Yield (kt):</label>
+        <input type="number" id="yield" value="20">
+        
+        <label for="burst">Height of Burst:</label>
+        <select id="burst">
+            <option value="surface">Surface</option>
+            <option value="airburst">Airburst</option>
+        </select>
+        
+        <label for="fallout">Include Fallout:</label>
+        <input type="checkbox" id="fallout">
+
+        <button id="detonate">Detonate</button>
+    </div>
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-    <!-- Map Initialization Script -->
-    <script>
-        const map = L.map('map', {
-            crs: L.CRS.Simple, // Using a simple coordinate system for a custom map
-            minZoom: -2,       // Zoom out limit
-            maxZoom: 2,        // Zoom in limit
-        });
-
-        // Define the image bounds (adjust as per your map's dimensions in meters)
-        const bounds = [[0, 0], [2200, 2200]];
-
-        // Add the map image (replace 'your-map-image.png' with your actual image file name)
-        const image = L.imageOverlay('10-5-24.png', bounds).addTo(map);
-
-        // Fit the map to the bounds
-        map.fitBounds(bounds);
-    </script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
 </body>
 </html>

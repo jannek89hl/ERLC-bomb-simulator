@@ -37,86 +37,129 @@ function detonate() {
     let fireballRadius, blastRadius, thermalRadius, lightBlastRadius;
     let descriptions = '';
 
-    // Pipe Bomb (0.01 kt)
+    // **Bomb Types**
     if (yieldValue === 0.01) {
-        fireballRadius = 3 * scalingFactor; // Small fireball radius
-        blastRadius = 10 * scalingFactor;   // Small but intense blast radius
-        thermalRadius = 20 * scalingFactor; // Heat can cause burns within 20m
-        lightBlastRadius = 50 * scalingFactor; // Minor blast damage further out
+        // Pipe Bomb (0.01 kt)
+        fireballRadius = 3 * scalingFactor;
+        blastRadius = 10 * scalingFactor;
+        thermalRadius = 20 * scalingFactor;
+        lightBlastRadius = 50 * scalingFactor;
         descriptions = `
             <li><span style="color:red;"><strong>Fireball radius:</strong> 3 m</span><br>
-            The fireball from a pipe bomb is small but can cause severe burns. The intense heat can ignite nearby materials such as clothing or paper.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 10 m</span><br>
-            The blast can severely injure or kill anyone within this radius. Shrapnel is dangerous and can cause penetrating wounds. In urban environments, shrapnel can ricochet off structures, increasing the danger.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 20 m</span><br>
-            Damage to infrastructure, including shattered windows and cracked walls. People within this range are likely to suffer concussive injuries. Some structural collapse may occur.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 50 m</span><br>
-            Structures like vehicles or buildings may suffer minor damage, such as broken windows. Civilians in this radius may experience minor injuries or trauma.</li>
+            Small fireball with intense heat that can ignite nearby materials, including clothing and vehicles.</li>
+            <li><span style="color:orange;"><strong>Blast damage radius:</strong> 10 m</span><br>
+            Severe injuries and potential fatalities in this radius. Shrapnel can cause penetrating wounds.</li>
+            <li><span style="color:yellow;"><strong>Moderate damage radius:</strong> 20 m</span><br>
+            Heavy structural damage, shattered windows, and injuries to people within this range.</li>
+            <li><span style="color:green;"><strong>Light damage radius:</strong> 50 m</span><br>
+            Damage is less severe, but structures like windows and vehicles will be affected.</li>
         `;
-    }
-
-    // C4 (0.2 kt)
-    else if (yieldValue === 0.2) {
-        fireballRadius = 10 * scalingFactor; // Larger fireball due to higher yield
-        blastRadius = 30 * scalingFactor;   // Significant blast damage within range
-        thermalRadius = 50 * scalingFactor; // Larger thermal radius, can ignite fires
-        lightBlastRadius = 100 * scalingFactor; // Further out blast damage
+    } else if (yieldValue === 0.02) {
+        // M67 Grenade (0.015 kt)
+        fireballRadius = 4 * scalingFactor;
+        blastRadius = 12 * scalingFactor;
+        thermalRadius = 15 * scalingFactor;
+        lightBlastRadius = 40 * scalingFactor;
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 10 m</span><br>
-            The fireball from C4 is powerful, capable of igniting nearby vehicles or structures. The intense heat could cause burns to anyone in the vicinity.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 30 m</span><br>
-            A larger blast radius with the potential for widespread destruction. Buildings can collapse or suffer severe damage, with a high chance of fatal injuries to people within this zone.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 50 m</span><br>
-            While buildings remain standing, structural damage will be extensive. Civilians can sustain severe injuries from the blast and flying debris. Vehicles within this radius can be destroyed.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 100 m</span><br>
-            Damage to structures further out may include broken windows, fallen debris, and minor trauma to civilians. This zone is more likely to see damage to vehicles and outdoor structures.</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 4 m</span><br>
+            A small but intense fireball. Can ignite nearby clothing, fuel, or other flammable materials.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 12 m</span><br>
+            A deadly zone with a high probability of fatalities and severe injury. Shrapnel will cause penetrating injuries.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast radius:</strong> 15 m</span><br>
+            Moderate structural damage. Injuries to civilians and possible vehicle damage.</li>
+            <li><span style="color:green;"><strong>Light blast radius:</strong> 40 m</span><br>
+            Light damage, mainly affecting glass, vehicles, and outdoor structures.</li>
         `;
-    }
-
-    // Landmine (0.3 kt)
-    else if (yieldValue === 0.3) {
-        fireballRadius = 5 * scalingFactor;  // Moderate fireball, due to explosive nature
-        blastRadius = 15 * scalingFactor;   // Heavy blast in a smaller area
-        thermalRadius = 25 * scalingFactor; // Thermal burns are possible at this range
-        lightBlastRadius = 60 * scalingFactor; // Lesser but still impactful outside
+    } else if (yieldValue === 0.05) {
+        // Time Bomb (0.05 kt)
+        fireballRadius = 6 * scalingFactor;
+        blastRadius = 18 * scalingFactor;
+        thermalRadius = 30 * scalingFactor;
+        lightBlastRadius = 70 * scalingFactor;
         descriptions = `
-            <li><span style="color:red;"><strong>Fireball radius:</strong> 5 m</span><br>
-            The fireball is smaller but still powerful enough to cause significant burns. It may ignite combustible materials nearby, including vehicles.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 15 m</span><br>
-            The explosion will severely injure or kill anyone within this radius. Structural damage is inevitable, and shrapnel will cause puncture wounds or death. It is a highly dangerous area.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 25 m</span><br>
-            The blast will likely cause injuries to civilians within this area, though death is less certain. Buildings will experience significant damage like cracks, shattered windows, and collapsing walls.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 60 m</span><br>
-            Structural damage may be limited to broken windows, knocked-over signs, or shattered glass. Civilians further out may experience minor injuries from debris or shockwaves.</li>
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 6 m</span><br>
+            A fireball with sufficient power to ignite and burn nearby objects, including structures and vehicles.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 18 m</span><br>
+            Major destruction and potential fatalities. Buildings collapse and debris causes serious injuries.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast radius:</strong> 30 m</span><br>
+            Serious structural damage, window shattering, and injuries to people in the vicinity.</li>
+            <li><span style="color:green;"><strong>Light blast radius:</strong> 70 m</span><br>
+            Minimal damage, mainly broken glass and minor injuries from flying debris.</li>
         `;
-    }
-
-    // TNT Block (1.0 kt)
-    else if (yieldValue === 1.0) {
-        fireballRadius = 20 * scalingFactor;  // Large fireball due to substantial yield
-        blastRadius = 60 * scalingFactor;    // Large blast radius with devastating effects
-        thermalRadius = 100 * scalingFactor; // Larger thermal zone that ignites most flammable materials
-        lightBlastRadius = 200 * scalingFactor; // Extensive blast effect over a wide area
+    } else if (yieldValue === 0.1) {
+        // C4 (0.1 kt)
+        fireballRadius = 8 * scalingFactor;
+        blastRadius = 25 * scalingFactor;
+        thermalRadius = 45 * scalingFactor;
+        lightBlastRadius = 100 * scalingFactor;
+        descriptions = `
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 8 m</span><br>
+            A larger fireball that can ignite buildings, vehicles, and outdoor debris. Severe heat impact.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 25 m</span><br>
+            Significant destruction. Casualties are likely, and large structures like walls and fences will be heavily damaged.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast radius:</strong> 45 m</span><br>
+            Heavy damage to nearby infrastructure. Likely injuries and structural collapse within the zone.</li>
+            <li><span style="color:green;"><strong>Light blast radius:</strong> 100 m</span><br>
+            Moderate damage to buildings and vehicles further out. Potential injuries from debris.</li>
+        `;
+    } else if (yieldValue === 0.2) {
+        // TNT Block (0.2 kt)
+        fireballRadius = 12 * scalingFactor;
+        blastRadius = 40 * scalingFactor;
+        thermalRadius = 60 * scalingFactor;
+        lightBlastRadius = 150 * scalingFactor;
+        descriptions = `
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 12 m</span><br>
+            A large fireball capable of igniting vehicles, buildings, and other combustible materials.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 40 m</span><br>
+            A strong blast radius causing massive destruction. Fatalities are highly likely within this range.</li>
+            <li><span style="color:yellow;"><strong>Moderate damage radius:</strong> 60 m</span><br>
+            Serious damage to infrastructure. Injuries and structural collapse are likely in this zone.</li>
+            <li><span style="color:green;"><strong>Light damage radius:</strong> 150 m</span><br>
+            Damage to buildings, vehicles, and trees, with possible minor injuries from flying debris.</li>
+        `;
+    } else if (yieldValue === 0.5) {
+        // Gasoline Bomb (0.5 kt)
+        fireballRadius = 15 * scalingFactor;
+        blastRadius = 50 * scalingFactor;
+        thermalRadius = 75 * scalingFactor;
+        lightBlastRadius = 175 * scalingFactor;
+        descriptions = `
+            <li><span style="color:red;"><strong>Fireball radius:</strong> 15 m</span><br>
+            A large fireball that ignites fuel, buildings, and other flammable objects in the immediate area.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 50 m</span><br>
+            Major destruction with high risk of fatalities. Buildings are leveled, and debris can cause severe injuries.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast radius:</strong> 75 m</span><br>
+            Significant damage to structures and vehicles, with injuries to people in the blast zone.</li>
+            <li><span style="color:green;"><strong>Light blast radius:</strong> 175 m</span><br>
+            Moderate to light damage to buildings and vehicles. Some injuries may occur from flying debris.</li>
+        `;
+    } else if (yieldValue === 1) {
+        // Car Bomb (1.0 kt)
+        fireballRadius = 20 * scalingFactor;
+        blastRadius = 60 * scalingFactor;
+        thermalRadius = 90 * scalingFactor;
+        lightBlastRadius = 200 * scalingFactor;
         descriptions = `
             <li><span style="color:red;"><strong>Fireball radius:</strong> 20 m</span><br>
-            The fireball from TNT will be extensive, with a large radius causing burns, fires, and explosions in nearby areas. Buildings, vehicles, and structures within this zone will likely catch fire.</li>
-            <li><span style="color:orange;"><strong>Heavy blast damage radius:</strong> 60 m</span><br>
-            The blast will cause catastrophic destruction in a large radius. Buildings and vehicles will be obliterated, and casualties are highly likely. People within this zone will either be killed or severely injured.</li>
-            <li><span style="color:yellow;"><strong>Moderate blast damage radius:</strong> 100 m</span><br>
-            Severe damage to structures, including collapsed buildings, shattered windows, and extensive shrapnel injuries. Civilians are at significant risk of death or injury from the explosion and debris.</li>
-            <li><span style="color:green;"><strong>Light blast damage radius:</strong> 200 m</span><br>
-            Light damage in this radius includes broken windows, damaged vehicles, and minor injuries. The blast will cause noticeable trauma, but fatalities are less likely outside the immediate blast zone.</li>
+            A very large fireball with extensive burning, destroying vehicles, buildings, and igniting all nearby materials.</li>
+            <li><span style="color:orange;"><strong>Heavy blast radius:</strong> 60 m</span><br>
+            Heavy destruction within this radius. There are likely fatalities and severe injuries.</li>
+            <li><span style="color:yellow;"><strong>Moderate blast radius:</strong> 90 m</span><br>
+            Serious damage to structures. Injuries likely to those within the range.</li>
+            <li><span style="color:green;"><strong>Light blast radius:</strong> 200 m</span><br>
+            Light damage to buildings, vehicles, and minor injuries from flying debris.</li>
         `;
     }
 
-    // Display detonation information
-    document.getElementById("explosionDescription").innerHTML = descriptions;
+    // Clear previous explosions and calculate new ones
+    clearExplosionCircles();
 
-    // Create and display explosion circles based on radius values
+    // Create explosion circles for visual representation
     const explosionCircle1 = L.circle(marker.getLatLng(), {
         color: 'red',
         fillColor: 'red',
-        fillOpacity: 0.2,
+        fillOpacity: 0.4,
         radius: fireballRadius
     }).addTo(map);
     explosionCircles.push(explosionCircle1);
@@ -124,7 +167,7 @@ function detonate() {
     const explosionCircle2 = L.circle(marker.getLatLng(), {
         color: 'orange',
         fillColor: 'orange',
-        fillOpacity: 0.2,
+        fillOpacity: 0.3,
         radius: blastRadius
     }).addTo(map);
     explosionCircles.push(explosionCircle2);
@@ -140,8 +183,12 @@ function detonate() {
     const explosionCircle4 = L.circle(marker.getLatLng(), {
         color: 'green',
         fillColor: 'green',
-        fillOpacity: 0.2,
+        fillOpacity: 0.1,
         radius: lightBlastRadius
     }).addTo(map);
     explosionCircles.push(explosionCircle4);
+
+    // Display detonation details
+    document.getElementById('detonation-details').innerHTML = descriptions;
+    document.getElementById('detonation-info').style.display = 'block';
 }

@@ -33,9 +33,11 @@ function detonate() {
     const fallout = document.getElementById('fallout').checked;
 
     // Example formulas for radii
-    const fireballRadius = 100 * Math.pow(yield, 1 / 3); // Fireball radius (m)
-    const blastRadius = 500 * Math.pow(yield, 1 / 3);   // Blast damage radius (m)
-    const thermalRadius = 1000 * Math.pow(yield, 1 / 3); // Thermal radiation radius (m)
+    const scalingFactor = 0.533; // 1 pixel = 0.533 meters (scaled to map)
+    
+    const fireballRadius = Math.pow(yield, 1 / 3) * 10 * scalingFactor; // Fireball radius (meters)
+    const blastRadius = Math.pow(yield, 1 / 3) * 50 * scalingFactor;   // Blast damage radius (meters)
+    const thermalRadius = Math.pow(yield, 1 / 3) * 100 * scalingFactor; // Thermal radiation radius (meters)
 
     // Log the results
     console.log(`Fireball Radius: ${fireballRadius.toFixed(2)} m`);
@@ -64,20 +66,19 @@ document.getElementById('preset').addEventListener('change', function() {
     const preset = this.value;
     switch(preset) {
         case 'hand_grenade':
-            document.getElementById('yield').value = 0.02; // 20 tons
+            document.getElementById('yield').value = 0.02; // 20 tons (hand grenade)
             break;
         case 'c4':
-            document.getElementById('yield').value = 0.5; // 500 tons
+            document.getElementById('yield').value = 0.5; // 500 tons (C4)
             break;
         case 'dynamite':
-            document.getElementById('yield').value = 0.1; // 100 tons
+            document.getElementById('yield').value = 0.1; // 100 tons (dynamite)
             break;
         default:
-            document.getElementById('yield').value = 20; // Default value
+            document.getElementById('yield').value = 20; // Default value (big bomb)
             break;
     }
 });
 
 // Event listener for detonation button
 document.getElementById('detonate').addEventListener('click', detonate);
-

@@ -26,7 +26,7 @@ function clearExplosionCircles() {
     explosionCircles = []; // Reset the array
 }
 
-// Function to detonate the bomb
+// Function to detonate the bomb and calculate explosion radii
 function detonate() {
     const yield = parseFloat(document.getElementById('yield').value);
     const burst = document.getElementById('burst').value;
@@ -52,16 +52,16 @@ function detonate() {
     // Clear any existing explosions
     clearExplosionCircles();
 
-    // Visualize the radii on the map
-    const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red' }).addTo(map).bindPopup('Fireball');
-    const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange' }).addTo(map).bindPopup('Blast Damage');
-    const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow' }).addTo(map).bindPopup('Thermal Radiation');
+    // Visualize the radii on the map (without popups)
+    const fireballCircle = L.circle(marker.getLatLng(), { radius: fireballRadius, color: 'red' }).addTo(map);
+    const blastCircle = L.circle(marker.getLatLng(), { radius: blastRadius, color: 'orange' }).addTo(map);
+    const thermalCircle = L.circle(marker.getLatLng(), { radius: thermalRadius, color: 'yellow' }).addTo(map);
 
     // Store the new explosion circles
     explosionCircles.push(fireballCircle, blastCircle, thermalCircle);
 }
 
-// Set predefined explosive types
+// Set predefined explosive types and yield values
 document.getElementById('preset').addEventListener('change', function() {
     const preset = this.value;
     switch(preset) {
@@ -78,6 +78,8 @@ document.getElementById('preset').addEventListener('change', function() {
             document.getElementById('yield').value = 20; // Default value (big bomb)
             break;
     }
+    // Clear any existing explosions when the preset is changed
+    clearExplosionCircles();
 });
 
 // Event listener for detonation button
@@ -85,8 +87,9 @@ document.getElementById('detonate').addEventListener('click', detonate);
 
 // Function to update explosion position when the marker is dragged
 marker.on('drag', function() {
+    // Clear any existing explosions and only detonate when the button is clicked
+    if (document.getElementById('detonate').disabled) return; // Don't detonate while dragging
     clearExplosionCircles();
-    detonate();
 });
 
 // Add a shadow under the marker and lift it when dragging
@@ -98,4 +101,14 @@ marker.on('dragstart', function() {
 marker.on('dragend', function() {
     // Reset the lift effect when dragging ends
     marker.setZIndexOffset(0);
+});
+
+// Disable detonation until a preset is selected
+document.getElementById('detonate').disabled = true;
+document.getElementById('preset').addEventListener('change', function() {
+    if (this.value !== "") {
+        document.getElementById('detonate').disabled = false; // Enable detonate after selecting preset
+    } else {
+        document.getElementById('detonate').disabled = true; // Disable if no preset selected
+    }
 });

@@ -88,4 +88,3 @@ $(window).on('resize', function () {
     $('#map').height(windowHeight * 0.7);  // Map takes up 70% of window height
     $('#detonation-details').height(windowHeight * 0.3);  // Details take up 30% of window height
 }).trigger('resize');  // Trigger resize to adjust on load
-

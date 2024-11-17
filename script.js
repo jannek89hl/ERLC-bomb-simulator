@@ -10,8 +10,18 @@ const bounds = [[0, 0], [2200, 2200]]; // Adjust based on map size
 const image = L.imageOverlay('10-5-24.png', bounds).addTo(map);
 map.fitBounds(bounds);
 
-// Add a draggable marker for the explosion point
-const marker = L.marker([1100, 1100], { draggable: true }).addTo(map);
+// Add a draggable marker for the explosion point with a shadow
+const markerShadow = L.divIcon({
+    className: 'marker-shadow',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
+const marker = L.marker([1100, 1100], { 
+    draggable: true, 
+    icon: markerShadow 
+}).addTo(map);
 marker.bindPopup("Explosion Point").openPopup();
 
 // Store existing explosion circles
@@ -82,3 +92,24 @@ document.getElementById('preset').addEventListener('change', function() {
 
 // Event listener for detonation button
 document.getElementById('detonate').addEventListener('click', detonate);
+
+// Function to update explosion position when the marker is dragged
+marker.on('drag', function() {
+    clearExplosionCircles();
+    detonate();
+});
+
+// Function to lift the marker and move the shadow when dragging starts
+marker.on('dragstart', function() {
+    marker.setIcon(L.divIcon({
+        className: 'marker-shadow-lifted',
+        iconSize: [50, 50],
+        iconAnchor: [25, 25],
+        popupAnchor: [0, -25]
+    }));
+});
+
+// Function to reset the marker position and shadow when dragging ends
+marker.on('dragend', function() {
+    marker.setIcon(markerShadow);
+});

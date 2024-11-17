@@ -17,7 +17,7 @@
 
         <!-- Yield Selector -->
         <label for="preset-selector">Select Explosion Type:</label>
-        <select id="preset-selector" onchange="updateExplosion()">
+        <select id="preset-selector" onchange="toggleCustomYield()">
             <option value="hand_grenade">Hand Grenade (0.02 kt)</option>
             <option value="dynamite">Dynamite (0.5 kt)</option>
             <option value="c4">C4 (1.0 kt)</option>
@@ -25,8 +25,10 @@
         </select>
 
         <!-- Custom Yield Input -->
-        <label for="custom-yield">Custom Yield (in Kilotons):</label>
-        <input id="custom-yield" type="number" placeholder="Enter custom yield" style="display:none;" onchange="updateExplosion()" />
+        <div id="custom-yield-container" style="display:none;">
+            <label for="custom-yield">Custom Yield (in Kilotons):</label>
+            <input id="custom-yield" type="number" placeholder="Enter custom yield" onchange="updateExplosion()" />
+        </div>
 
         <h4>Explosion Details</h4>
         <div id="explosion-details">
